@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/libs/">
+    <Project Path="D:/projects/libs/JhDbCrypter/libs/JohaEfCrypter/JohaEfCrypter.csproj" Id="15245c80-8a8c-4960-9d14-884464881aaf" />
+    <Project Path="libs/JohaAspCrypter/JohaAspCrypter.csproj" Id="5d081590-b55c-4d41-9edf-c5cee63fbae9" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="test/ConsoleTestProject/ConsoleTestProject.csproj" Id="e66061a9-4e00-4a1f-8416-9f64e766fd81" />
+  </Folder>
+</Solution>
