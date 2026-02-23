@@ -82,25 +82,37 @@ namespace JohaEfCrypter.Extensions
             }
             return prop.Metadata.PropertyInfo.Name.ToLower();
         }
+        static PropertyEntry CheckProp(IEnumerable<PropertyEntry> props)
+        {
+            var chechSum = props.FirstOrDefault(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().CheckSum);
+            if (chechSum == null)
+            {
+                throw new Exception("Bu yerda tug`ri hato chiqarish kerak");
+            }
+            return chechSum;
+        }
         static void EncryptField(EntityEntry entity, IEnumerable<PropertyEntry> props)
         {
             ArgumentNullException.ThrowIfNull(entity);
             StringBuilder builder = new();
+            var checkProp = CheckProp(props);
+            if (checkProp == null) return;
+
             foreach (PropertyEntry prop in props
-                                                .Where(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().IsEncrypt)
-                                                .OrderBy(m => m.GetName()))
+                                            .Where(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().IsEncrypt)
+                                            .OrderBy(m => m.GetName()))
             {
+
                 if (prop.CurrentValue is string str && !string.IsNullOrEmpty(str))
                 {
 
                     var name = prop.GetName() + "|" + str + ";";
                     builder.Append(name);
-                    //builder.Append()
                     prop.CurrentValue = str.EncryptStr();
                 }
             }
-            var checkSumProp = props.FirstOrDefault(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().CheckSum);
-            checkSumProp?.CurrentValue = builder.ToString().HashString();
+
+            checkProp?.CurrentValue = builder.ToString().HashString();
         }
         public static void EncryptEntity(EntityEntry entity)
         {
