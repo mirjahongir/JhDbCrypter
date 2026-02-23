@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+
 using JohaEfCrypter.Attributes;
+
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JohaEfCrypter.Extensions
 {
@@ -68,17 +73,34 @@ namespace JohaEfCrypter.Extensions
                 prop.CurrentValue = realValue?.HashString();
             }
         }
+        static string GetName(this PropertyEntry prop)
+        {
+            var attr = prop.Metadata.PropertyInfo.GetCustomAttribute<ColumnAttribute>();
+            if (attr != null)
+            {
+                return attr.Name.ToLower();
+            }
+            return prop.Metadata.PropertyInfo.Name.ToLower();
+        }
         static void EncryptField(EntityEntry entity, IEnumerable<PropertyEntry> props)
         {
             ArgumentNullException.ThrowIfNull(entity);
             StringBuilder builder = new();
-            foreach (var prop in props.Where(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().IsEncrypt))
+            foreach (PropertyEntry prop in props
+                                                .Where(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().IsEncrypt)
+                                                .OrderBy(m => m.GetName()))
             {
                 if (prop.CurrentValue is string str && !string.IsNullOrEmpty(str))
                 {
+
+                    var name = prop.GetName() + "|" + str + ";";
+                    builder.Append(name);
+                    //builder.Append()
                     prop.CurrentValue = str.EncryptStr();
                 }
             }
+            var checkSumProp = props.FirstOrDefault(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().CheckSum);
+            checkSumProp?.CurrentValue = builder.ToString().HashString();
         }
         public static void EncryptEntity(EntityEntry entity)
         {

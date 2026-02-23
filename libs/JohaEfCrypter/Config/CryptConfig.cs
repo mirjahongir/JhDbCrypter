@@ -14,8 +14,9 @@ namespace JohaEfCrypter.Config
         {
             get
             {
-                if (string.IsNullOrEmpty(Option.Key))
+                if (string.IsNullOrEmpty(Option?.Key))
                 {
+
                     throw new System.Exception("Key not found");
                 }
                 if (keyData != null && keyData.Length == 32) return keyData;
