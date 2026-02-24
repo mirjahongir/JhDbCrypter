@@ -7,7 +7,7 @@ namespace JohaEfCrypter.Attributes
     public class EncryptedAttribute : Attribute
     {
         public EncryptedAttribute() { }
-        public bool IsHash { get; set; } = true;
+        public bool IsHash { get; set; } = false;
         public string? HashField { get; set; }
         public bool CheckSum { get; set; } = false;
         public bool IsEncrypt { get; set; } = false;

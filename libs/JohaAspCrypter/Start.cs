@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Threading;
+
+using JohaAspCrypter.HostedServices;
+
 using JohaEfCrypter.Config;
+
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace JohaAspCrypter
 {
@@ -15,7 +21,26 @@ namespace JohaAspCrypter
             };
             action(option);
             CryptConfig.Option = option;
+            service.TryAddSingleton<IWorker, UpdateDbHostService>();
             return service;
+        }
+        public static IServiceProvider UpdateDb(this IServiceProvider provider)
+        {
+            try
+            {
+                var worker = provider.GetRequiredService<IWorker>();
+                var cts = new CancellationTokenSource();
+                worker.StartAsync(cts.Token);
+                cts.Cancel();
+                worker.StopAsync();
+                return provider;
+            }
+            catch(Exception ext)
+            {
+                Console.WriteLine("error");
+                return null;
+            }
+            
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+
 using JohaEfCrypter.Crypters;
 
 namespace JohaEfCrypter.Extensions
@@ -24,8 +25,6 @@ namespace JohaEfCrypter.Extensions
         {
             byte[] data = Encoding.UTF8.GetBytes(plainText);
             return Encrypt(data);
-
-
         }
         public static string EncryptStr(this string plainText)
         {
@@ -38,16 +37,17 @@ namespace JohaEfCrypter.Extensions
         public static string DecryptBase64(this string base64)
         {
             var data = Convert.FromBase64String(base64);
-            return Encoding.UTF8.GetString(Decrypt(data));
+            var d = Decrypt(data);
+            return Encoding.UTF8.GetString(d);
         }
         public static string DecryptString(this string text)
         {
             var data = Encoding.UTF8.GetBytes(text);
             return Encoding.UTF8.GetString(Decrypt(data));
         }
-        
+
         public static byte[] Decrypt(this byte[] data) => BaseEncrypter.Decrypt(data);
         #endregion
-       
+
     }
 }

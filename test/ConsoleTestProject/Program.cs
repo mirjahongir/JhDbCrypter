@@ -1,11 +1,47 @@
 ﻿
 using ConsoleTestProject.Entities;
 
+using JohaAspCrypter;
+
 using JohaEfCrypter.Config;
+using JohaEfCrypter.Expressions;
 using JohaEfCrypter.Extensions;
 
-Console.WriteLine("Hello, World!");
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
+Console.WriteLine("Hello, World!");
+var connect = Environment.GetEnvironmentVariable("connect");
+//CryptConfig.Option = new CryptOption() { Key = "test_test_test" };
+//var dec1 = "gJAy8J8aoDW+GJy+sdPbYLoMEsq4ZMdnjHMLM6TtQRP0k1bZhRD9scUzuTJnvTKt".DecryptBase64();
+//var enc = "joha".EncryptStr();
+//var dec = enc.DecryptBase64();
+
+
+// 1. IServiceCollection yaratamiz
+var services = new ServiceCollection();
+// 2. Service'larni ro‘yxatdan o‘tkazamiz
+services.AddDbContext<DbContext, ApplicationContext>();
+services.RegisterJhCrypter(option =>
+{
+    option.Key = "test_test_test";
+});
+var build = services.BuildServiceProvider();
+build.UpdateDb();
+
+var context = build.GetService<DbContext>();
+var _person = context.Set<Person>();
+
+
+var person = _person.Encrypted().Where(m => m.Name== "joha1").FirstOrDefault();
+Console.WriteLine(person.Name);
+_person.Add(new Person() { Name = "joha1" });
+context.SaveChanges();
+
+Console.WriteLine(person.Name);
+
+
+return;
 CryptConfig.Option = new CryptOption() { EncryptType = JohaEfCrypter.Enums.EncryptType.AesCbc, Key = "Helloworlkd" };
 using var db = new ApplicationContext();
 
