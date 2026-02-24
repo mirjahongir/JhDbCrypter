@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using JohaEfCrypter.Attributes;
 
 namespace ConsoleTestProject.Entities
@@ -14,11 +13,10 @@ namespace ConsoleTestProject.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         [Column("name")]
-        [Encrypted(IsEncrypt =true)]
+        [Encrypted(IsEncrypt = true)]
         public string? Name { get; set; }
-        [Column("hash_field")]
-        [Encrypted(IsHash =true)]
-        public string? HashField { get; set; }
+        [Encrypted(CheckSum = true)]
+        public string? chech_sum { get; set; }
 
 
     }

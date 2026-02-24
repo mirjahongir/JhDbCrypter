@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\JohaAspCrypter\JohaAspCrypter.csproj" />
     <ProjectReference Include="..\..\libs\JohaEfCrypter\JohaEfCrypter.csproj" />
   </ItemGroup>
 

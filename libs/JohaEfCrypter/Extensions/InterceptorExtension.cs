@@ -75,6 +75,7 @@ namespace JohaEfCrypter.Extensions
         }
         static string GetName(this PropertyEntry prop)
         {
+            
             var attr = prop.Metadata.PropertyInfo.GetCustomAttribute<ColumnAttribute>();
             if (attr != null)
             {
@@ -108,7 +109,8 @@ namespace JohaEfCrypter.Extensions
 
                     var name = prop.GetName() + "|" + str + ";";
                     builder.Append(name);
-                    prop.CurrentValue = str.EncryptStr();
+                   var enct= str.EncryptStr();
+                    prop.CurrentValue = enct;
                 }
             }
 
