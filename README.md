@@ -3,20 +3,20 @@
  Dastur hali alfa versiyada yaqinda tuliq versiya chiqadi
 
  ``` 
- public class ApplicationContext : DbContext
-    {
-        public DbSet<Person> Persons { get; set; } //=> (DbSet<Person>)Set<Person>().Encrypted();
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("{{connectionString}}")
+ services.AddDbContext<DbContext, ApplicationDbContext>((sp, option) =>
+            {
+                option.UseNpgsql(GeneralEnv.PostgresConnection)
+
                 .AddInterceptors(
-                // Save qilishda Ma`lumotlarni shifirlaydi
-                new CryptoInterceptor(),
-                // Select qilganda Decrypt qiladi
-                new DecryptioInterceptor()).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking); ;
-            base.OnConfiguring(optionsBuilder);
-        }
-    }
+                    // Db ga saqlashdan  Shifirlash Interceptor
+                    sp.GetRequiredService<CryptoInterceptor>(),
+                    // Bazadan olganda Deshifirlash Interceptor
+                    sp.GetRequiredService<DecryptioInterceptor>(),
+
+                    sp.GetRequiredService<ValidationSaveChangesInterceptor>())
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
+            return services;
 
  ```
 
@@ -43,4 +43,13 @@
         [Encrypted(IsHash =true)]
         public string? HashField { get; set; }
     }
+ ```
+
+ ## Deshifirlash jarayonida Consistend hatolik bulsa shu modelni null qilib qaytaradi va Error Handlerga ma`lumot junatadi
+
+ Error Handlerni Registratsiya qilish
+
+ ```
+                                          //Model Quyiladi 
+ service.AddScoped<IInterceptorErrorHandler<Person>, Your_Error_Handler>()
  ```

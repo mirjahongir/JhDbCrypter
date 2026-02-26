@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
+using JohaEfCrypter.Attributes;
 using System.Text;
 
 using JhCrypter.Attributes;
 
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 
 namespace JohaEfCrypter.Extensions
 {
     public static class InterceptorExtension
     {
-        //public static void SaveInterceptor(this SaveChangesCompletedEventData save)
-        //{
-        //    var context = save.Context;
-        //    if (context == null) return;
 
+        public static string GetName(this PropertyEntry prop)
         //    var entities = context
         //        .ChangeTracker
         //        .Entries()
@@ -73,7 +73,7 @@ namespace JohaEfCrypter.Extensions
         }
         static string GetName(this PropertyEntry prop)
         {
-            
+
             var attr = prop.Metadata.PropertyInfo.GetCustomAttribute<ColumnAttribute>();
             if (attr != null)
             {
@@ -81,7 +81,7 @@ namespace JohaEfCrypter.Extensions
             }
             return prop.Metadata.PropertyInfo.Name.ToLower();
         }
-        static PropertyEntry CheckProp(IEnumerable<PropertyEntry> props)
+        public static PropertyEntry CheckProp(this IEnumerable<PropertyEntry> props)
         {
             var chechSum = props.FirstOrDefault(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().CheckSum);
             if (chechSum == null)
@@ -90,41 +90,24 @@ namespace JohaEfCrypter.Extensions
             }
             return chechSum;
         }
-        static void EncryptField(EntityEntry entity, IEnumerable<PropertyEntry> props)
+        public static PropertyInfo CheckProp(this IEnumerable<PropertyInfo> props)
         {
-            ArgumentNullException.ThrowIfNull(entity);
-            StringBuilder builder = new();
-            var checkProp = CheckProp(props);
-            if (checkProp == null) return;
-
-            foreach (PropertyEntry prop in props
-                                            .Where(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().IsEncrypt)
-                                            .OrderBy(m => m.GetName()))
-            {
-
-                if (prop.CurrentValue is string str && !string.IsNullOrEmpty(str))
-                {
-
-                    var name = prop.GetName() + "|" + str + ";";
-                    builder.Append(name);
-                   var enct= str.EncryptStr();
-                    prop.CurrentValue = enct;
-                }
-            }
-
-            checkProp?.CurrentValue = builder.ToString().HashString();
+            var checkSum = props.FirstOrDefault(m => m.GetCustomAttribute<EncryptedAttribute>().CheckSum);
+            return checkSum;
         }
-        public static void EncryptEntity(EntityEntry entity)
+        public static string GetName(this PropertyInfo info)
         {
-            var attr = entity.Entity.GetType().GetCustomAttribute<EncryptTableAttribute>();
-            if (attr == null) { return; }
-            var props = entity.Properties.Where(m =>
-            m.Metadata.PropertyInfo?.GetCustomAttribute<EncryptedAttribute>() != null
-            && m.Metadata.ClrType == typeof(string));
-
-            ParseHash(entity, props);
-            HashingField(entity, props);
-            EncryptField(entity, props);
+            var attr = info.GetCustomAttribute<ColumnAttribute>();
+            if (attr != null) return attr.Name.ToLower();
+            return info.Name.ToLower();
+        }
+        public static Action<object>? ErrorAct{ get; set; }
+        public static void Error(object error)
+        {
+            if (ErrorAct != null)
+            {
+                ErrorAct(error);
+            }
         }
     }
 }

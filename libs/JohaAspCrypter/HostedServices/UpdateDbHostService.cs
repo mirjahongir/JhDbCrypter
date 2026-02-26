@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-using JhCrypter.Attributes;
+using JohaEfCrypter.Attributes;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -40,10 +40,7 @@ namespace JohaAspCrypter.HostedServices
             var set = GetDbSet(db, entityType);// db.Set(entityType);
             var parameter = Expression.Parameter(entityType, "x");
             var property = Expression.Property(parameter, propertyName);
-            var body = Expression.Equal(
-                property,
-                Expression.Constant(null, property.Type)
-            );
+            var body = Expression.Equal(property, Expression.Constant(null, property.Type));
 
             var lambda = Expression.Lambda(body, parameter);
             var whereMethod = typeof(Queryable)
@@ -72,9 +69,9 @@ namespace JohaAspCrypter.HostedServices
                                                  return true;
                                              })
                                              .MakeGenericMethod(entityType);
-           
+
             return (IQueryable)whereMethod.Invoke(null, new object[] { set, lambda })!;
-            
+
         }
 
         static string GetName(PropertyInfo info)
@@ -102,7 +99,7 @@ namespace JohaAspCrypter.HostedServices
 
         static void UpdateCheckSum(DbContext db, Type entityType, PropertyInfo checkSumProp)
         {
-            var rows = BuildNullCheckQuery(db, entityType, GetName(checkSumProp));
+            var rows = BuildNullCheckQuery(db, entityType, checkSumProp.Name);//GetName(checkSumProp)
 
             foreach (var entity in rows)
             {
