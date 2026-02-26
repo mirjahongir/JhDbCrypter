@@ -3,38 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
-using JohaEfCrypter.Attributes;
-using System.Text;
-
 using JhCrypter.Attributes;
-
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Threading.Tasks;
 
 namespace JohaEfCrypter.Extensions
 {
     public static class InterceptorExtension
     {
 
-        public static string GetName(this PropertyEntry prop)
-        //    var entities = context
-        //        .ChangeTracker
-        //        .Entries()
-        //        .Where(m => m.Entity.GetType().IsDefined(typeof(EncryptTableAttribute), inherit: true));
-
-
-        //    foreach (var entry in entities)
-        //    {
-        //        if (entry.State is (Microsoft.EntityFrameworkCore.EntityState.Added or Microsoft.EntityFrameworkCore.EntityState.Modified or Microsoft.EntityFrameworkCore.EntityState.Unchanged))
-        //        {
-        //            EncryptEntity(entry);
-        //        }
-        //    }
-
-        //}
-
-        static void ParseHash(EntityEntry entity, IEnumerable<PropertyEntry> props)
+        internal static void ParseHash(EntityEntry entity, IEnumerable<PropertyEntry> props)
         {
             ArgumentNullException.ThrowIfNull(entity);
             foreach (var prop in props.Where(m => m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().IsHash))
@@ -51,7 +28,7 @@ namespace JohaEfCrypter.Extensions
                 prop.CurrentValue = value.HashString();
             }
         }
-        static void HashingField(EntityEntry entity, IEnumerable<PropertyEntry> props)
+        internal static void HashingField(EntityEntry entity, IEnumerable<PropertyEntry> props)
         {
             foreach (var prop in props.Where(m => !string.IsNullOrEmpty(m.Metadata.PropertyInfo.GetCustomAttribute<EncryptedAttribute>().HashField)))
             {
@@ -71,7 +48,7 @@ namespace JohaEfCrypter.Extensions
                 prop.CurrentValue = realValue?.HashString();
             }
         }
-        static string GetName(this PropertyEntry prop)
+        internal static string GetName(this PropertyEntry prop)
         {
 
             var attr = prop.Metadata.PropertyInfo.GetCustomAttribute<ColumnAttribute>();
@@ -101,7 +78,7 @@ namespace JohaEfCrypter.Extensions
             if (attr != null) return attr.Name.ToLower();
             return info.Name.ToLower();
         }
-        public static Action<object>? ErrorAct{ get; set; }
+        public static Action<object>? ErrorAct { get; set; }
         public static void Error(object error)
         {
             if (ErrorAct != null)

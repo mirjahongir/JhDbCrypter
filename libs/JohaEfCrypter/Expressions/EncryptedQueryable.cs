@@ -15,7 +15,6 @@ namespace JohaEfCrypter.Expressions
             _source = source;
             Provider = new EncryptedQueryProvider(source.Provider);
         }
-                
         public Type ElementType => typeof(T);
         public Expression Expression => _source.Expression;
         public IQueryProvider Provider { get; }

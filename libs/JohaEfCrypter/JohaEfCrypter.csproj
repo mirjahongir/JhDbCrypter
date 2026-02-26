@@ -9,7 +9,6 @@
 		<Company>None</Company>
 		<Description>This packet testing yet after finish</Description>
 		<PackageProjectUrl>https://github.com/mirjahongir/JhDbCrypter</PackageProjectUrl>
-		
 		<RepositoryUrl>https://github.com/mirjahongir/JhDbCrypter</RepositoryUrl>
 		<Version>0.0.2-alfa</Version>
 	</PropertyGroup>
