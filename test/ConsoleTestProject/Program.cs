@@ -1,31 +1,32 @@
-﻿
-using ConsoleTestProject.Entities;
-
+﻿using ConsoleTestProject.Entities;
+using ConsoleTestProject.MongoTesting;
+using JhCrypter.Config;
 using JohaAspCrypter;
-
-using JohaEfCrypter.Config;
 using JohaEfCrypter.Expressions;
 using JohaEfCrypter.Extensions;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-Console.WriteLine("Hello, World!");
-var connect = Environment.GetEnvironmentVariable("connect");
-//CryptConfig.Option = new CryptOption() { Key = "test_test_test" };
-//var dec1 = "gJAy8J8aoDW+GJy+sdPbYLoMEsq4ZMdnjHMLM6TtQRP0k1bZhRD9scUzuTJnvTKt".DecryptBase64();
-//var enc = "joha".EncryptStr();
-//var dec = enc.DecryptBase64();
-
-
-// 1. IServiceCollection yaratamiz
 var services = new ServiceCollection();
 // 2. Service'larni ro‘yxatdan o‘tkazamiz
 services.AddDbContext<DbContext, ApplicationContext>();
 services.RegisterJhCrypter(option =>
 {
     option.Key = "test_test_test";
+    option.EncryptType = JohaEfCrypter.Enums.EncryptType.AesCbc;  
 });
+
+Console.WriteLine("Hello, World!");
+var connect = Environment.GetEnvironmentVariable("connect");
+
+TestMongo.MongoTest();
+//CryptConfig.Option = new CryptOption() { Key = "test_test_test" };
+//var dec1 = "gJAy8J8aoDW+GJy+sdPbYLoMEsq4ZMdnjHMLM6TtQRP0k1bZhRD9scUzuTJnvTKt".DecryptBase64();
+//var enc = "joha".EncryptStr();
+//var dec = enc.DecryptBase64();
+return;
+
+// 1. IServiceCollection yaratamiz
 var build = services.BuildServiceProvider();
 build.UpdateDb();
 

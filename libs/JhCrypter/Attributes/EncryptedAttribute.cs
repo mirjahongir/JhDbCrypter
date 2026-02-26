@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace JohaEfCrypter.Attributes
+namespace JhCrypter.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class EncryptedAttribute : Attribute
@@ -19,7 +19,7 @@ namespace JohaEfCrypter.Attributes
                          && p.PropertyType != typeof(string))
                 .ToList();
 
-            if (invalidProps.Any())
+            if (invalidProps.Count != 0)
             {
                 throw new InvalidOperationException(
                     $"[Encrypted] faqat string property uchun ishlatiladi. Xato: {string.Join(", ", invalidProps.Select(p => p.Name))}");

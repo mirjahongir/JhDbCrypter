@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading;
-
+using JhCrypter.Config;
 using JohaAspCrypter.HostedServices;
-
-using JohaEfCrypter.Config;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

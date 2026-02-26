@@ -1,6 +1,7 @@
-﻿using JohaEfCrypter.Config;
+﻿using JhCrypter.Config;
 
-namespace JohaEfCrypter.Crypters
+using JohaEfCrypter.Enums;
+namespace JhCrypter.Crypters
 {
     static class BaseEncrypter
     {
@@ -8,8 +9,8 @@ namespace JohaEfCrypter.Crypters
         {
             return CryptConfig.EncryptType switch
             {
-                Enums.EncryptType.AesCbc => AesCbcEncryption.Encrypt(byteData),
-                Enums.EncryptType.AesGcm => AesGcmEncrypter.Encrypt(byteData),
+                EncryptType.AesCbc => AesCbcEncryption.Encrypt(byteData),
+                EncryptType.AesGcm => AesGcmEncrypter.Encrypt(byteData),
                 _ => AesCbcEncryption.Encrypt(byteData),
             };
         }
@@ -17,8 +18,8 @@ namespace JohaEfCrypter.Crypters
         {
             return CryptConfig.EncryptType switch
             {
-                Enums.EncryptType.AesCbc => AesCbcEncryption.Decrypt(encrypt),
-                Enums.EncryptType.AesGcm => AesGcmEncrypter.Decrypt(encrypt),
+                EncryptType.AesCbc => AesCbcEncryption.Decrypt(encrypt),
+                EncryptType.AesGcm => AesGcmEncrypter.Decrypt(encrypt),
                 _ => AesCbcEncryption.Decrypt(encrypt),
             };
         }

@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
-using JohaEfCrypter.Attributes;
+using JhCrypter.Attributes;
 using JohaEfCrypter.Extensions;
-
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 

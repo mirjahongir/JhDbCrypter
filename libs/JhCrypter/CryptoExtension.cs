@@ -2,13 +2,12 @@
 using System.Security.Cryptography;
 using System.Text;
 
-using JohaEfCrypter.Crypters;
+using JhCrypter.Crypters;
 
 namespace JohaEfCrypter.Extensions
 {
     public static class CryptoExtension
     {
-
         public static byte[] ToHash(this string key)
         {
             using var sha = SHA256.Create();

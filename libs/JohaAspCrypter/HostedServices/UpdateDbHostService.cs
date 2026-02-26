@@ -5,7 +5,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using JohaEfCrypter.Attributes;
+
+using JhCrypter.Attributes;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace JohaAspCrypter.HostedServices

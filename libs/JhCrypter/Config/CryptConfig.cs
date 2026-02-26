@@ -1,9 +1,7 @@
-﻿using System.Xml.Linq;
-
-using JohaEfCrypter.Enums;
+﻿using JohaEfCrypter.Enums;
 using JohaEfCrypter.Extensions;
 
-namespace JohaEfCrypter.Config
+namespace JhCrypter.Config
 {
     public static class CryptConfig
     {

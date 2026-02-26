@@ -1,41 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using JohaEfCrypter.Attributes;
+using JhCrypter.Attributes;
 
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JohaEfCrypter.Extensions
 {
     public static class InterceptorExtension
     {
-        public static void SaveInterceptor(this SaveChangesCompletedEventData save)
-        {
-            var context = save.Context;
-            if (context == null) return;
+        //public static void SaveInterceptor(this SaveChangesCompletedEventData save)
+        //{
+        //    var context = save.Context;
+        //    if (context == null) return;
 
-            var entities = context
-                .ChangeTracker
-                .Entries()
-                .Where(m => m.Entity.GetType().IsDefined(typeof(EncryptTableAttribute), inherit: true));
+        //    var entities = context
+        //        .ChangeTracker
+        //        .Entries()
+        //        .Where(m => m.Entity.GetType().IsDefined(typeof(EncryptTableAttribute), inherit: true));
 
 
-            foreach (var entry in entities)
-            {
-                if (entry.State is (Microsoft.EntityFrameworkCore.EntityState.Added or Microsoft.EntityFrameworkCore.EntityState.Modified or Microsoft.EntityFrameworkCore.EntityState.Unchanged))
-                {
-                    EncryptEntity(entry);
-                }
-            }
+        //    foreach (var entry in entities)
+        //    {
+        //        if (entry.State is (Microsoft.EntityFrameworkCore.EntityState.Added or Microsoft.EntityFrameworkCore.EntityState.Modified or Microsoft.EntityFrameworkCore.EntityState.Unchanged))
+        //        {
+        //            EncryptEntity(entry);
+        //        }
+        //    }
 
-        }
+        //}
+
         static void ParseHash(EntityEntry entity, IEnumerable<PropertyEntry> props)
         {
             ArgumentNullException.ThrowIfNull(entity);

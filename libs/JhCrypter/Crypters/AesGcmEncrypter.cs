@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Security.Cryptography;
 
-using JohaEfCrypter.Config;
+using JhCrypter.Config;
 
-namespace JohaEfCrypter.Crypters
+namespace JhCrypter.Crypters
 {
 
-    internal static class AesGcmEncrypter
+     static class AesGcmEncrypter
     {
         //// 256-bit kalit (32 byte)
         //public static readonly byte[] Key = Convert.FromBase64String("YOUR_BASE64_32_BYTE_KEY_HERE");

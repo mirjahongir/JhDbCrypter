@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/libs/">
     <Project Path="D:/projects/libs/JhDbCrypter/libs/JohaEfCrypter/JohaEfCrypter.csproj" Id="15245c80-8a8c-4960-9d14-884464881aaf" />
+    <Project Path="libs/JhCrypter/JhCrypter.csproj" Id="48475ded-b725-4a20-951d-9197cc03ea6a" />
+    <Project Path="libs/JhMongoCrypter/JhMongoCrypter.csproj" Id="40b0b5c7-8b5f-4fd5-907b-b68973497bb5" />
     <Project Path="libs/JohaAspCrypter/JohaAspCrypter.csproj" Id="5d081590-b55c-4d41-9edf-c5cee63fbae9" />
   </Folder>
   <Folder Name="/Solution Items/">

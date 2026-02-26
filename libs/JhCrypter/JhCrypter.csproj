@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>Joha Crypto</Title>
+		<Company>None</Company>
+		<Description>This packet testing yet after finish</Description>
+		<PackageProjectUrl>https://github.com/mirjahongir/JhDbCrypter</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/mirjahongir/JhDbCrypter</RepositoryUrl>
+		<Version>0.0.2-alfa</Version>
+		<PackageReadmeFile></PackageReadmeFile>
+	</PropertyGroup>
+
+
+</Project>

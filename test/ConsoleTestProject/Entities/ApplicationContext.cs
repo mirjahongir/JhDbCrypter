@@ -1,6 +1,4 @@
-﻿using JohaEfCrypter.Expressions;
-using JohaEfCrypter.Intecepters;
-
+﻿using JohaEfCrypter.Intecepters;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConsoleTestProject.Entities

@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Security.Cryptography;
 
-using JohaEfCrypter.Config;
+using JhCrypter.Config;
 
-namespace JohaEfCrypter.Crypters
+namespace JhCrypter.Crypters
 {
     static class AesCbcEncryption
     {

@@ -5,7 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using JohaEfCrypter.Attributes;
+using JhCrypter.Attributes;
+
 using JohaEfCrypter.Extensions;
 
 using Microsoft.EntityFrameworkCore.Diagnostics;
