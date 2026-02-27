@@ -1,24 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JhCrypter.Attributes;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 
 
-namespace ConsoleTestProject.Entities
+namespace ConsoleTestProject.Entities.SqlEntity
 {
-    public class MongoPerson
-    {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
-        [Encrypted(IsEncrypt = true)]
-        public string? Name { get; set; }
-        [Encrypted(IsHash = true)]
-        public string? Password { get; set; }
-
-
-    }
     [Table("person_test")]
     [EncryptTable]
     public class Person
@@ -30,6 +16,15 @@ namespace ConsoleTestProject.Entities
         [Column("name")]
         [Encrypted(IsEncrypt = true)]
         public string? Name { get; set; }
+        [Column("password")]
+        [Encrypted(IsHash = true)]
+        public string? Password { get; set; }
+        [Column("pnfl")]
+        [Encrypted(IsEncrypt = true)]
+        public string? Pnfl { get; set; }
+        [Column("password_hash")]
+        [Encrypted(HashField = nameof(Pnfl))]
+        public string? PnflHash { get; set; }
         [Encrypted(CheckSum = true)]
         public string? chech_sum { get; set; }
 

@@ -45,7 +45,25 @@ namespace JohaAspCrypter
             var method = tip.GetMethod("ErrorHandler");
             method?.Invoke(errorHandler, new[] { obj });
         }
+        public static ServiceProvider UpdateDb(this ServiceProvider provider)
+        {
+            try
+            {
 
+                _service = provider;
+                var worker = provider.CreateScope().ServiceProvider.GetRequiredService<IWorker>();
+                var cts = new CancellationTokenSource();
+                worker.StartAsync(cts.Token);
+                cts.Cancel();
+                worker.StopAsync();
+                return provider;
+            }
+            catch (Exception ext)
+            {
+                Console.WriteLine(ext);
+                throw ext;
+            }
+        }
         public static IServiceProvider UpdateDb(this IServiceProvider provider)
         {
             try
