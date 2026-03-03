@@ -1,9 +1,7 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-
-using JhCrypter.Attributes;
-
+﻿using JhCrypter.Attributes;
 using JohaEfCrypter.Extensions;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace JohaEfCrypter.Expressions
 {
@@ -25,17 +23,30 @@ namespace JohaEfCrypter.Expressions
             // [Encrypted] bormi?
             if (prop.GetCustomAttribute<EncryptedAttribute>() is EncryptedAttribute attr && attr != null)
             {
-                // O‘ng tomoni constant bo‘lishi kerak
-                if (node.Right is not ConstantExpression constant)
-                    return base.VisitBinary(node);
-                if (constant.Value is not string plain)
-                    return base.VisitBinary(node);
+                // // O‘ng tomoni constant bo‘lishi kerak
+                // if (node.Right is not ConstantExpression constant)
+                //     return base.VisitBinary(node);
+                ////var plain = node.Right.ToString();
+                // if (constant.Value is not string plain)
+                //     return base.VisitBinary(node);
+                string plain = "";
+                if (node.Right is ConstantExpression constant)
+                {
+                     plain = constant.Value as string;
+                }
+                else if (node.Right is MemberExpression members)
+                {
+                    // member expression qiymatini olish
+                    var lambda = Expression.Lambda(members);
+                    var compiled = lambda.Compile();
+                     plain = compiled.DynamicInvoke() as string;
+                }
 
                 if (attr.IsEncrypt)
                 {
                     // 🔐 ENCRYPT QILINADI
                     var encrypted = CryptoExtension.EncryptStr(plain);
-                    var encryptedConstant =Expression.Constant(encrypted, typeof(string));
+                    var encryptedConstant = Expression.Constant(encrypted, typeof(string));
                     //node.Left.Na
                     return Expression.Equal(node.Left, encryptedConstant);
 

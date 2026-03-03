@@ -15,7 +15,9 @@ namespace JohaEfCrypter.Extensions
         }
         public static string HashString(this string key)
         {
-            return Convert.ToBase64String(ToHash(key));
+            var hash = Convert.ToBase64String(ToHash(key));
+            return hash;
+           
         }
 
         #region Encrypt

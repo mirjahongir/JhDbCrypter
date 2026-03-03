@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading;
-using JhCrypter.Config;
+﻿using JhCrypter.Config;
 using JohaAspCrypter.HostedServices;
 using JohaEfCrypter.Extensions;
 using JohaEfCrypter.Intecepters;
 using JohaEfCrypter.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Threading;
 
 namespace JohaAspCrypter
 {
@@ -14,6 +14,7 @@ namespace JohaAspCrypter
     public static class RegisterService
     {
         static IServiceProvider _service;
+
         public static IServiceCollection RegisterJhCrypter(this IServiceCollection service, Action<CryptOption> action)
         {
             CryptOption option = new()
