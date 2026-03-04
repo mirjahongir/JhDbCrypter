@@ -38,7 +38,7 @@ namespace ConsoleTestProject
         #endregion
         public void InserMongoPerson()
         {
-            MongoPerson person = new() { Name = "joha", Password = "PasswordHash" };
+            MongoPerson person = new() { Name = "joha", Password = "MyPassword" };
             _person.InsertOne(person);
 
         }
@@ -49,7 +49,7 @@ namespace ConsoleTestProject
         }
         public MongoPerson GetByPassword()
         {
-            var person = _person.Find(m => m.Password == "PasswordHash").FirstOrDefault();
+            var person = _person.Find(m => m.Password == "MyPassword").FirstOrDefault();
             return person;
         }
 

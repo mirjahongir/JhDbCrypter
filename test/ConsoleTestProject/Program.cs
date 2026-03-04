@@ -23,6 +23,7 @@ build.UpdateDb();
 var service = build.GetRequiredService<SqlService>();
 
 service.AddPersonDb();
+
 Console.ReadLine();
 service.SearchByPersonName();
 Console.ReadLine();
