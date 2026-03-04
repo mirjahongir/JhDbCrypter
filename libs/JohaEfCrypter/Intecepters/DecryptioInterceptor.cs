@@ -1,12 +1,10 @@
-﻿using System;
+﻿using JhCrypter.Attributes;
+using JohaEfCrypter.Extensions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-
-using JhCrypter.Attributes;
-
-using JohaEfCrypter.Extensions;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace JohaEfCrypter.Intecepters
 {

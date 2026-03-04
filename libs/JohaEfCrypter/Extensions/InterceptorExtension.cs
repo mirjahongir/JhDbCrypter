@@ -1,10 +1,10 @@
-﻿using System;
+﻿using JhCrypter.Attributes;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
-using JhCrypter.Attributes;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace JohaEfCrypter.Extensions
 {
