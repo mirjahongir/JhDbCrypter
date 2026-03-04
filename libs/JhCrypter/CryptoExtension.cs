@@ -4,10 +4,12 @@ using System.Text;
 
 using JhCrypter.Crypters;
 
-namespace JohaEfCrypter.Extensions
+namespace JhCrypter
 {
     public static class CryptoExtension
     {
+       public const string prefix = "crypt:";
+        public const string hash = "hash:";
         public static byte[] ToHash(this string key)
         {
             using var sha = SHA256.Create();

@@ -57,7 +57,8 @@ namespace ConsoleTestProject
         public void SearchByPersonName()
         {
             var personDb = _context.Set<Person>();
-            var person = personDb.Encrypted().Where(m => m.Name == "joha1").FirstOrDefault();
+            List<string> names = ["joha1"];
+            var person = personDb.Encrypted().Where(m => m.Name!="joha1").FirstOrDefault();
             Console.WriteLine(person?.Name);
 
         }

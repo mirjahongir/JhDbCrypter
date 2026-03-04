@@ -1,5 +1,4 @@
 ﻿using JohaEfCrypter.Enums;
-using JohaEfCrypter.Extensions;
 
 namespace JhCrypter.Config
 {

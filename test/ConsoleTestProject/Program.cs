@@ -16,15 +16,14 @@ Console.WriteLine("Start Program");
 
 services.AddSqlService();
 var build = services.BuildServiceProvider();
-var context = build.GetRequiredService<DbContext>();
-context.Database.EnsureDeleted();
-context.Database.EnsureCreated();
+//var context = build.GetRequiredService<DbContext>();
+//context.Database.EnsureDeleted();
+//context.Database.EnsureCreated();
 build.UpdateDb();
 var service = build.GetRequiredService<SqlService>();
+//service.AddPersonDb();
 
-service.AddPersonDb();
-
-Console.ReadLine();
+//Console.ReadLine();
 service.SearchByPersonName();
 Console.ReadLine();
 #endregion

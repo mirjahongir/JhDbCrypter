@@ -1,6 +1,4 @@
-﻿using JohaEfCrypter.Extensions;
-using MongoDB.Bson.IO;
-using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using System;
 
@@ -8,7 +6,6 @@ namespace JhMongoCrypter.Intecepters.Serializer
 {
     internal class EncryptedHashSerializer : SerializerBase<string>
     {
-        const string hash = "hash";
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, string value)
         {
             if (string.IsNullOrEmpty(value))

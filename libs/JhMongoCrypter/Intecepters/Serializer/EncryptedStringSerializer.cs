@@ -1,12 +1,12 @@
-﻿using JohaEfCrypter.Extensions;
-using MongoDB.Bson.Serialization.Serializers;
+﻿using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
+using JhCrypter;
 
 namespace JhMongoCrypter.Intecepters.Serializer
 {
     internal class EncryptedStringSerializer : SerializerBase<string>
     {
-        const string prefix = "Crypt:";
+       
         public override void Serialize(BsonSerializationContext context,
             BsonSerializationArgs args, string value)
         {
