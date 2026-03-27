@@ -13,9 +13,9 @@ namespace JhMongoCrypter.Intecepters.Serializer
                 context.Writer.WriteString("");
                 return;
             }
-            if (value.StartsWith(hash, StringComparison.OrdinalIgnoreCase))
+            if (value.StartsWith(HeshPrefix, StringComparison.OrdinalIgnoreCase))
                 return;
-            context.Writer.WriteString(hash + value.HashString());
+            context.Writer.WriteString(HeshPrefix + value.HashString());
         }
         public override string Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
