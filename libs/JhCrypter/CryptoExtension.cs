@@ -1,36 +1,45 @@
-﻿using System;
+﻿using JhCrypter.Config;
+using JhCrypter.Crypters;
+using System;
 using System.Security.Cryptography;
 using System.Text;
-
-using JhCrypter.Crypters;
 
 namespace JhCrypter
 {
     public static class CryptoExtension
     {
-       public const string prefix = "crypt:";
-        public const string hash = "hash:";
+
         public static byte[] ToHash(this string key)
         {
+            if (key.StartsWith(Prefix.HeshPrefix))
+            {
+                return Encoding.UTF8.GetBytes(key);
+            }
             using var sha = SHA256.Create();
             return sha.ComputeHash(Encoding.UTF8.GetBytes(key));
         }
         public static string HashString(this string key)
         {
+            if (key.StartsWith(Prefix.HeshPrefix))
+                return key;
+
             var hash = Convert.ToBase64String(ToHash(key));
             return hash;
-           
         }
 
         #region Encrypt
         public static byte[] Encrypt(this byte[] data) => BaseEncrypter.Encrypt(data);
         public static byte[] Encrypt(this string plainText)
         {
+            if (plainText.StartsWith(Prefix.CryptPrefix))
+                return Encoding.UTF8.GetBytes(plainText);
             byte[] data = Encoding.UTF8.GetBytes(plainText);
             return Encrypt(data);
         }
         public static string EncryptStr(this string plainText)
         {
+            if (plainText.StartsWith(Prefix.CryptPrefix))
+                return plainText;
             var data = Encrypt(plainText);
             return Convert.ToBase64String(data);
         }

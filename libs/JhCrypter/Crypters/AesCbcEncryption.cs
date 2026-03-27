@@ -26,7 +26,7 @@ namespace JhCrypter.Crypters
 
             // byte[] plaintextBytes = Encoding.UTF8.GetBytes(plaintext);
 
-            using MemoryStream ms = new MemoryStream();
+            using MemoryStream ms = new();
             using (var cryptoStream = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
             {
                 cryptoStream.Write(plaintextBytes, 0, plaintextBytes.Length);
@@ -45,7 +45,7 @@ namespace JhCrypter.Crypters
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.PKCS7;
 
-            using MemoryStream ms = new MemoryStream();
+            using MemoryStream ms = new();
             using (var cryptoStream = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
             {
                 cryptoStream.Write(ciphertext, 0, ciphertext.Length);

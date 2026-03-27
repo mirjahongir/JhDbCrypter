@@ -16,21 +16,18 @@ namespace JhMongoCrypter.Intecepters.Serializer
                 context.Writer.WriteNull();
                 return;
             }
-
-            context.Writer.WriteString(prefix + CryptoExtension.EncryptStr(value));
+            context.Writer.WriteString(CryptPrefix + CryptoExtension.EncryptStr(value));
         }
 
         public override string Deserialize(BsonDeserializationContext context,
             BsonDeserializationArgs args)
         {
             var value = context.Reader.ReadString();
-            if (value.StartsWith(prefix))
+            if (value.StartsWith(CryptPrefix))
             {
-                return CryptoExtension.DecryptBase64(value.Substring(prefix.Length));
+                return CryptoExtension.DecryptBase64(value.Substring(CryptPrefix.Length));
             }
             return value;
-          //  return base.Deserialize(context, args);
-            //return CryptoExtension.DecryptBase64(context.Reader.ReadString());
         }
     }
 }
