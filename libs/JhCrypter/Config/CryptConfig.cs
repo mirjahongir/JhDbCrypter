@@ -17,7 +17,7 @@ namespace JhCrypter.Config
                     throw new System.Exception("Key not found");
                 }
                 if (keyData != null && keyData.Length == 32) return keyData;
-                keyData = CryptoExtension.ToHash(Option.Key);
+                keyData = HashExtension.ToHash(Option.Key, false);
                 return keyData;
             }
         }

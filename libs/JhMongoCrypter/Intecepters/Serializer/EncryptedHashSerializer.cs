@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using System;
+using JhCrypter;
 
 namespace JhMongoCrypter.Intecepters.Serializer
 {
@@ -13,9 +14,9 @@ namespace JhMongoCrypter.Intecepters.Serializer
                 context.Writer.WriteString("");
                 return;
             }
-            if (value.StartsWith(HeshPrefix, StringComparison.OrdinalIgnoreCase))
-                return;
-            context.Writer.WriteString(HeshPrefix + value.HashString());
+            //if (value.StartsWith(HeshPrefix, StringComparison.OrdinalIgnoreCase))
+            //    return;
+            context.Writer.WriteString(value.HashString());
         }
         public override string Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
         {

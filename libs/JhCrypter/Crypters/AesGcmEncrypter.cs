@@ -7,7 +7,7 @@ using JhCrypter.Config;
 namespace JhCrypter.Crypters
 {
 
-     static class AesGcmEncrypter
+    static class AesGcmEncrypter
     {
         //// 256-bit kalit (32 byte)
         //public static readonly byte[] Key = Convert.FromBase64String("YOUR_BASE64_32_BYTE_KEY_HERE");
@@ -30,16 +30,19 @@ namespace JhCrypter.Crypters
         }
 
         // Ma'lumotni decrypt qilish
-        public static byte[] Decrypt(byte[] encryptedData)
+        public static byte[] Decrypt(in ReadOnlySpan<byte> encryptedData)
         {
-            byte[] nonce = new byte[12];
-            byte[] tag = new byte[16];
-            byte[] ciphertext = new byte[encryptedData.Length - 12 - 16];
+            if (encryptedData.Length < 28)
+                throw new ArgumentException("Invalid data");
 
-            Array.Copy(encryptedData, 0, nonce, 0, 12);
-            Array.Copy(encryptedData, 12, tag, 0, 16);
-            Array.Copy(encryptedData, 28, ciphertext, 0, ciphertext.Length);
+            byte[] nonce = encryptedData.Slice(0, 12).ToArray();
+            byte[] tag = encryptedData.Slice(12, 16).ToArray();
 
+            int cipherLength = encryptedData.Length - 28;
+            if (cipherLength <= 0)
+                throw new ArgumentException("Invalid ciphertext");
+
+            byte[] ciphertext = encryptedData.Slice(28, cipherLength).ToArray();
             byte[] decrypted = new byte[ciphertext.Length];
 
             using var aes = new AesGcm(CryptConfig.AesKey);
@@ -47,6 +50,23 @@ namespace JhCrypter.Crypters
 
             return decrypted;
         }
+        //public static byte[] Decrypt(in ReadOnlySpan<byte> encryptedData)
+        //{
+        //    byte[] nonce = new byte[12];
+        //    byte[] tag = new byte[16];
+        //    byte[] ciphertext = new byte[encryptedData.Length - 12 - 16];
+
+        //    Array.Copy(encryptedData, 0, nonce, 0, 12);
+        //    Array.Copy(encryptedData, 12, tag, 0, 16);
+        //    Array.Copy(encryptedData, 28, ciphertext, 0, ciphertext.Length);
+
+        //    byte[] decrypted = new byte[ciphertext.Length];
+
+        //    using var aes = new AesGcm(CryptConfig.AesKey);
+        //    aes.Decrypt(nonce, ciphertext, tag, decrypted);
+
+        //    return decrypted;
+        //}
 
         // Byte array larni birlashtirish yordamchi
         private static byte[] Combine(params byte[][] arrays)

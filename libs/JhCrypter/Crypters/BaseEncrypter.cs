@@ -1,6 +1,6 @@
 ﻿using JhCrypter.Config;
-
 using JohaEfCrypter.Enums;
+using System;
 namespace JhCrypter.Crypters
 {
     static class BaseEncrypter
@@ -14,7 +14,7 @@ namespace JhCrypter.Crypters
                 _ => AesCbcEncryption.Encrypt(byteData),
             };
         }
-        public static byte[] Decrypt(byte[] encrypt)
+        public static byte[] Decrypt(in ReadOnlySpan< byte> encrypt)
         {
             return CryptConfig.EncryptType switch
             {
@@ -22,6 +22,22 @@ namespace JhCrypter.Crypters
                 EncryptType.AesGcm => AesGcmEncrypter.Decrypt(encrypt),
                 _ => AesCbcEncryption.Decrypt(encrypt),
             };
+        }
+
+        public static bool IsBase64(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+
+            input = input.Trim();
+
+            // uzunligi 4 ga karrali bo‘lishi kerak
+            if (input.Length % 4 != 0)
+                return false;
+
+            Span<byte> buffer = new Span<byte>(new byte[input.Length]);
+
+            return Convert.TryFromBase64String(input, buffer, out _);
         }
     }
 }
