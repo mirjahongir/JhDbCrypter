@@ -6,6 +6,8 @@ namespace JhCrypter.Config
     {
         public EncryptType EncryptType { get; set; }
         public string? Key { get; set; }
+        public string? SigningKey { get; set; }
+        public string? AuthEncryptingKey { get; set; }
     }
     public static class Prefix
     {
