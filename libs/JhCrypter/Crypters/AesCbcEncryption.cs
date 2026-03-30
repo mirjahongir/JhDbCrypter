@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Security.Cryptography;
-
 using JhCrypter.Config;
 
 namespace JhCrypter.Crypters
@@ -37,21 +37,71 @@ namespace JhCrypter.Crypters
         }
 
         // Decrypt
-        public static byte[] Decrypt(byte[] ciphertext)
+
+        public static byte[] Decrypt(in ReadOnlySpan<byte> ciphertext)
         {
             using Aes aes = Aes.Create();
             aes.Key = Key;
             aes.IV = IV;
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.PKCS7;
+            using var decryptor = aes.CreateDecryptor();
+            using var ms = new MemoryStream(ciphertext.ToArray());
+            using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
+            using var result = new MemoryStream();
 
-            using MemoryStream ms = new();
-            using (var cryptoStream = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
-            {
-                cryptoStream.Write(ciphertext, 0, ciphertext.Length);
-                cryptoStream.FlushFinalBlock();
-            }
-            return ms.ToArray();
+            cs.CopyTo(result);
+            return result.ToArray();
+
+            //using MemoryStream ms = new(ciphertext);
+            //using (var cryptoStream = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+            //{
+            //    cryptoStream.Write(ciphertext, 0, ciphertext.Length);
+            //    cryptoStream.FlushFinalBlock();
+            //}
+            //return ms.ToArray();
         }
+        //public static byte[] Decrypt(in ReadOnlySpan<byte> data)
+        //{
+        //    if (data.Length < 16)
+        //        throw new ArgumentException("Invalid data");
+
+        //    byte[] iv = data.Slice(0, 16).ToArray();
+        //    byte[] ciphertext = data.Slice(16).ToArray();
+
+        //    using Aes aes = Aes.Create();
+        //    aes.Key = Key;
+        //    aes.IV = iv;
+
+        //    using var decryptor = aes.CreateDecryptor();
+        //    using var ms = new MemoryStream(ciphertext);
+        //    using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
+        //    using var result = new MemoryStream();
+
+        //    cs.CopyTo(result);
+        //    return result.ToArray();
+        //}
+        //public static byte[] Decrypt(ReadOnlySpan<byte> data)
+        //{
+        //    if (data.Length < 16)
+        //        throw new ArgumentException("Invalid data");
+
+        //    byte[] iv = data.Slice(0, 16).ToArray();
+        //    byte[] ciphertext = data.Slice(16).ToArray();
+
+        //    using Aes aes = Aes.Create();
+        //    aes.Key = Key;
+        //    aes.IV = iv;
+        //    aes.Mode = CipherMode.CBC;
+        //    aes.Padding = PaddingMode.PKCS7;
+
+        //    using MemoryStream ms = new();
+        //    using var cryptoStream = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write);
+
+        //    cryptoStream.Write(ciphertext);
+        //    cryptoStream.FlushFinalBlock();
+
+        //    return ms.ToArray();
+        //}
     }
 }

@@ -28,7 +28,6 @@ namespace JohaEfCrypter.Intecepters
                 if (entry.State is (Microsoft.EntityFrameworkCore.EntityState.Added or Microsoft.EntityFrameworkCore.EntityState.Modified or Microsoft.EntityFrameworkCore.EntityState.Unchanged))
                 {
                     EncryptEntity(entry);
-                    //SaveInterceptor(entry);//
                 }
             }
             return base.SavingChanges(eventData, result);
@@ -101,6 +100,11 @@ namespace JohaEfCrypter.Intecepters
                     builder.Append(name);
                     var enct = str.EncryptStr();
                     prop.CurrentValue = enct;
+                }
+                if (prop.CurrentValue is byte[] bts)
+                {
+                    if (bts == null || bts.Length == 0) return;
+                    prop.CurrentValue = bts.Encrypt();
                 }
             }
 

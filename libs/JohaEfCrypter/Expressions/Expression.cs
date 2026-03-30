@@ -25,7 +25,7 @@ namespace JohaEfCrypter.Expressions
             }
             else if (attr.IsHash)
             {
-                var hash = CryptoExtension.HashString(plain);
+                var hash = HashExtension.HashString(plain);
                 var hashConstant = Expression.Constant(hash, typeof(string));
                 return Expression.Equal(node.Left, hashConstant);
             }
@@ -43,7 +43,7 @@ namespace JohaEfCrypter.Expressions
             }
             else if (attr.IsHash)
             {
-                var hash = CryptoExtension.HashString(plain);
+                var hash = HashExtension.HashString(plain);
                 var hashConstant = Expression.Constant(hash, typeof(string));
                 return Expression.NotEqual(node.Left, hashConstant);
             }
@@ -100,7 +100,7 @@ namespace JohaEfCrypter.Expressions
                     {
                         foreach (string str in values.Cast<string>())
                         {
-                            data.Add(CryptoExtension.HashString(str));
+                            data.Add(HashExtension.HashString(str));
                         }
                     }
                     else

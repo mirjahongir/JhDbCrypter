@@ -11,7 +11,6 @@ namespace JohaEfCrypter.Intecepters
 {
     public class DecryptioInterceptor : IMaterializationInterceptor
     {
-
         public DecryptioInterceptor() { }
 
         public object InitializedInstance(MaterializationInterceptionData materializationData, object entity)
@@ -43,6 +42,11 @@ namespace JohaEfCrypter.Intecepters
                     var name = prop.GetName() + "|" + decValue + ";";
                     builder.Append(name);
                     prop.SetValue(entity, decValue);
+                }
+                if (prop.GetValue(entity) is byte[] byteData)
+                {
+                    if (byteData == null || byteData.Length == 0) return;
+                    prop.SetValue(entity, byteData.Decrypt());
                 }
             }
             var hash = builder.ToString().HashString();
