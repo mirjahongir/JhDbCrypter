@@ -33,12 +33,23 @@ namespace JohaAspCrypter.HostedServices
 
             return (IQueryable)generic.Invoke(db, null)!;
         }
-        static IQueryable BuildNullCheckQuery(DbContext db, Type entityType, string propertyName)
+        static Expression BuildNullOrEmptyCheck(Expression property)
+        {
+            // x.Prop == null
+            var nullCheck = Expression.Equal(property, Expression.Constant(null, property.Type));
+
+            // x.Prop == ""
+            var emptyCheck = Expression.Equal(property, Expression.Constant(string.Empty, property.Type));
+
+            // null || empty
+            return Expression.OrElse(nullCheck, emptyCheck);
+        }
+        static IQueryable<object> BuildNullCheckQuery(DbContext db, Type entityType, string propertyName)
         {
             var set = GetDbSet(db, entityType);// db.Set(entityType);
             var parameter = Expression.Parameter(entityType, "x");
             var property = Expression.Property(parameter, propertyName);
-            var body = Expression.Equal(property, Expression.Constant(null, property.Type));
+            var body = BuildNullOrEmptyCheck(property);// Expression.Equal(property, Expression.Constant(null, property.Type));
 
             var lambda = Expression.Lambda(body, parameter);
             var whereMethod = typeof(Queryable)
@@ -68,7 +79,7 @@ namespace JohaAspCrypter.HostedServices
                                              })
                                              .MakeGenericMethod(entityType);
 
-            return (IQueryable)whereMethod.Invoke(null, new object[] { set, lambda })!;
+            return ((IQueryable)whereMethod.Invoke(null, new object[] { set, lambda })!).Cast<object>();
 
         }
 
@@ -97,18 +108,20 @@ namespace JohaAspCrypter.HostedServices
 
         static void UpdateCheckSum(DbContext db, Type entityType, PropertyInfo checkSumProp)
         {
-            var rows = BuildNullCheckQuery(db, entityType, checkSumProp.Name);//GetName(checkSumProp)
+            var rows = BuildNullCheckQuery(db, entityType, checkSumProp.Name).AsTracking(); ;//GetName(checkSumProp)
 
             foreach (var entity in rows)
             {
                 var value = "test";// ComputeCheckSum(entity);
-
-                checkSumProp.SetValue(entity, value);
-
-                db.Entry(entity).Property(checkSumProp.Name).IsModified = true;
+                var entry = db.Entry(entity);
+                entry.Property(checkSumProp.Name).CurrentValue = value; // SetValue o'rniga
+                entry.Property(checkSumProp.Name).IsModified = true;
             }
-
+            db.ChangeTracker.DetectChanges();
+            Console.WriteLine($"Modified entries: {db.ChangeTracker.Entries().Count(e => e.State == EntityState.Modified)}");
             db.SaveChanges();
+
+            //db.SaveChanges();
         }
 
         public async Task StopAsync()
